@@ -3,11 +3,12 @@ from collections import defaultdict
 import shutil
 import os
 from datetime import datetime
-from babel.dates import format_datetime
+from babel.dates import format_datetime, get_timezone, UTC
 from .data import get_registration, get_leaderboard
 
 
 DATETIME_FORMAT = "d MMMM yyyy 'à' HH 'h' mm"
+TIMEZONE = get_timezone("America/Montreal")
 
 
 def generate_leaderboard(users, leaderboard):
@@ -30,7 +31,12 @@ def generate_leaderboard(users, leaderboard):
 
     return template.render({
         "leaderboards": sorted(data.items()),
-        "now": format_datetime(datetime.now(), DATETIME_FORMAT, locale='fr_CA'),
+        "now": format_datetime(
+            datetime.now(tz=UTC),
+            DATETIME_FORMAT,
+            tzinfo=TIMEZONE,
+            locale='fr_CA',
+        ),
     })
 
 
