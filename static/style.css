@@ -104,6 +104,10 @@ table .numeric {
     text-decoration: none;
 }
 
+.star:focus {
+    outline: none;
+}
+
 .star-2::before {
     content: "\2605";
     color: #e8bf43;

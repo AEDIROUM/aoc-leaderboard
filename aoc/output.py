@@ -41,8 +41,11 @@ def generate_leaderboard(users, leaderboard):
     for category, entries in data.items():
         rank_entries(entries)
 
+    live_days = list(range(1, datetime.now(tz=TIMEZONE).day + 1))
+
     return template.render({
         "leaderboards": sorted(data.items()),
+        "live_days": live_days,
         "now": format_datetime(
             datetime.now(tz=UTC),
             DATETIME_FORMAT,

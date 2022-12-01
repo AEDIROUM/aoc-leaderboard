@@ -50,9 +50,13 @@
                     <td>{{ entry["name"] }}</td>
                     <td class="stars">
                         {% for completion in entry["stars"] %}
+                        {% if loop.index in live_days %}
                         <a href="https://adventofcode.com/2022/day/{{ loop.index }}"
                            target="_blank" rel="noopener"
                            class="star star-{{ completion }}"></a>
+                        {% else %}
+                        <span class="star star-{{ completion }}"></span>
+                        {% endif %}
                         {% endfor %}
                     </td>
                     <td class="numeric">{{ entry["score"] }}</td>
