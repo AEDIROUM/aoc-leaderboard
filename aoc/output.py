@@ -5,6 +5,7 @@ import os
 from datetime import datetime
 from babel.dates import format_datetime, get_timezone, UTC
 from .data import get_registration, get_leaderboard
+from .rank import rank_entries
 
 
 DATETIME_FORMAT = "d MMMM yyyy 'à' HH 'h' mm"
@@ -22,12 +23,12 @@ def generate_leaderboard(users, leaderboard):
             category = users[member["name"]]
             data[category].append({
                 "name": member["name"],
-                "stars": member["stars"],
-                "local_score": member["local_score"],
+                "stars": int(member["stars"]),
+                "score": int(member["local_score"]),
             })
 
     for category, entries in data.items():
-        entries.sort(key=lambda entry: -entry["local_score"])
+        rank_entries(entries)
 
     return template.render({
         "leaderboards": sorted(data.items()),

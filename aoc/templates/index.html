@@ -24,8 +24,15 @@
         <h2>{{ category }}</h2>
 
         <table>
+            <colgroup>
+                <col span="1" style="width: 5%;">
+                <col span="1" style="width: 65%;">
+                <col span="1" style="width: 15%;">
+                <col span="1" style="width: 15%;">
+            </colgroup>
             <thead>
                 <tr>
+                    <th>Rang</th>
                     <th>Nom</th>
                     <th class="numeric">Étoiles</th>
                     <th class="numeric">Score</th>
@@ -34,9 +41,10 @@
             <tbody>
                 {% for entry in leaderboard %}
                 <tr>
+                    <td class="numeric">{{ entry["rank"] }}</td>
                     <td>{{ entry["name"] }}</td>
                     <td class="numeric">{{ entry["stars"] }}/50</td>
-                    <td class="numeric">{{ entry["local_score"] }}</td>
+                    <td class="numeric">{{ entry["score"] }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
