@@ -19,13 +19,13 @@
 }
 
 html {
-    padding: 0;
+    padding: var(--unit);
     margin: 0;
 }
 
 body {
     max-width: calc(40 * var(--unit));
-    margin: 2cm auto;
+    margin: 0 auto;
 }
 
 h1, h2, h3 {
@@ -80,6 +80,10 @@ a:focus {
     outline: 2px solid currentColor;
 }
 
+footer {
+    margin-top: calc(2 * var(--unit));
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -98,6 +102,6 @@ tbody tr:nth-child(2n + 1) {
     background-color: var(--background-light);
 }
 
-table tr:hover {
+tbody tr:hover {
     background-color: var(--background-hover);
 }
