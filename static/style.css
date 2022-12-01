@@ -98,9 +98,25 @@ table .numeric {
     text-align: right;
 }
 
-table .stars a {
+.star {
+    display: inline-block;
+    width: calc(.5 * var(--unit));
     text-decoration: none;
-    margin-left: -4px;
+}
+
+.star-2::before {
+    content: "\2605";
+    color: #e8bf43;
+}
+
+.star-1::before {
+    content: "\2605";
+    color: silver;
+}
+
+.star-0::before {
+    content: "\2606";
+    color: var(--text-unemph);
 }
 
 tbody tr:nth-child(2n + 1) {

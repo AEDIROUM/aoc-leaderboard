@@ -51,15 +51,8 @@
                     <td class="stars">
                         {% for completion in entry["stars"] %}
                         <a href="https://adventofcode.com/2022/day/{{ loop.index }}"
-                           target="_blank" rel="noopener">
-                            {% if completion == 0 %}
-                            &#x2606;
-                            {% elif completion == 1 %}
-                            &#x2BE8;
-                            {% else %}
-                            &#x2605;
-                            {% endif %}
-                        </a>
+                           target="_blank" rel="noopener"
+                           class="star star-{{ completion }}"></a>
                         {% endfor %}
                     </td>
                     <td class="numeric">{{ entry["score"] }}</td>
