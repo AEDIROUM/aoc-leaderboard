@@ -1,0 +1,8 @@
+[Unit]
+Description=Update the Advent of Code leaderboard
+
+[Timer]
+OnCalendar=*:0/15
+
+[Install]
+WantedBy=timers.target

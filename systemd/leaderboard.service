@@ -1,0 +1,9 @@
+[Unit]
+Description=Update the Advent of Code leaderboard
+Wants=leaderboard.timer
+
+[Service]
+User=user
+Type=oneshot
+ExecStart=/bin/bash -c './update leaderboard && ./build'
+WorkingDirectory=/path/to/aoc-leaderboard
