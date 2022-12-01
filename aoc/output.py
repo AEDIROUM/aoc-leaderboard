@@ -21,9 +21,20 @@ def generate_leaderboard(users, leaderboard):
     for key, member in leaderboard["members"].items():
         if member["name"] in users:
             category = users[member["name"]]
+            stars = [0] * 25
+
+            for index in range(26):
+                if str(index + 1) in member["completion_day_level"]:
+                    status = member["completion_day_level"][str(index + 1)]
+
+                    if "2" in status:
+                        stars[index] = 2
+                    elif "1" in status:
+                        stars[index] = 1
+
             data[category].append({
                 "name": member["name"],
-                "stars": int(member["stars"]),
+                "stars": stars,
                 "score": int(member["local_score"]),
             })
 

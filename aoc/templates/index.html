@@ -30,16 +30,16 @@
 
         <table>
             <colgroup>
-                <col span="1" style="width: 5%;">
-                <col span="1" style="width: 65%;">
-                <col span="1" style="width: 15%;">
-                <col span="1" style="width: 15%;">
+                <col span="1" style="width: 5%;" class="numeric">
+                <col span="1" style="width: 30%;">
+                <col span="1" style="width: 50%;">
+                <col span="1" style="width: 15%;" class="numeric">
             </colgroup>
             <thead>
                 <tr>
                     <th class="numeric">Rang</th>
                     <th>Nom</th>
-                    <th class="numeric">Étoiles</th>
+                    <th>Étoiles</th>
                     <th class="numeric">Score</th>
                 </tr>
             </thead>
@@ -48,7 +48,20 @@
                 <tr>
                     <td class="numeric">{{ entry["rank"] }}</td>
                     <td>{{ entry["name"] }}</td>
-                    <td class="numeric">{{ entry["stars"] }}/50</td>
+                    <td class="stars">
+                        {% for completion in entry["stars"] %}
+                        <a href="https://adventofcode.com/2022/day/{{ loop.index }}"
+                           target="_blank" rel="noopener">
+                            {% if completion == 0 %}
+                            &#x2606;
+                            {% elif completion == 1 %}
+                            &#x2BE8;
+                            {% else %}
+                            &#x2605;
+                            {% endif %}
+                        </a>
+                        {% endfor %}
+                    </td>
                     <td class="numeric">{{ entry["score"] }}</td>
                 </tr>
                 {% endfor %}

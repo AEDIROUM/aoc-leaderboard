@@ -98,6 +98,11 @@ table .numeric {
     text-align: right;
 }
 
+table .stars a {
+    text-decoration: none;
+    margin-left: -4px;
+}
+
 tbody tr:nth-child(2n + 1) {
     background-color: var(--background-light);
 }
