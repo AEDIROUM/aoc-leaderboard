@@ -1,7 +1,7 @@
 import requests
 import json
 from azure.identity import InteractiveBrowserCredential, TokenCachePersistenceOptions, UsernamePasswordCredential
-from .config import read_config
+from .config import config
 
 
 leaderboard_cache = "cache/leaderboard.json"
@@ -24,11 +24,10 @@ def get_leaderboard():
 
 
 def update_leaderboard():
-    config = read_config("./config.ini")
     data = fetch_leaderboard(
-        id=config["leaderboard"]["id"],
-        year=config["leaderboard"]["year"],
-        session=config["leaderboard"]["session"],
+        id=config.leaderboard.id,
+        year=config.leaderboard.year,
+        session=config.leaderboard.session,
     )
 
     with open(leaderboard_cache, "w") as file:
@@ -51,8 +50,8 @@ def fetch_registration(tenant, user, form, username, category):
 
     for response in data["value"]:
         answers = json.loads(response["answers"])
-        res_username = answers[int(username)]["answer1"]
-        res_category = answers[int(category)]["answer1"]
+        res_username = answers[username]["answer1"]
+        res_category = answers[category]["answer1"]
         users[res_username] = res_category
 
     return users
@@ -67,13 +66,12 @@ def get_registration():
 
 
 def update_registration():
-    config = read_config("./config.ini")
     data = fetch_registration(
-        tenant=config["registration"]["tenant"],
-        user=config["registration"]["user"],
-        form=config["registration"]["form"],
-        username=config["registration"]["username"],
-        category=config["registration"]["category"],
+        tenant=config.registration.tenant,
+        user=config.registration.user,
+        form=config.registration.form,
+        username=config.registration.username,
+        category=config.registration.category,
     )
 
     with open(registration_cache, "w") as file:
