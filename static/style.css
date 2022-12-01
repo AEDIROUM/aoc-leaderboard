@@ -35,11 +35,13 @@ h1, h2, h3 {
 h1 {
     font-size: 1.35rem;
     line-height: 1.2;
+    margin: calc(2 * var(--unit)) 0 var(--unit) 0;
 }
 
 h2 {
     font-size: 1.25rem;
     line-height: 1.2;
+    margin: calc(2 * var(--unit)) 0 var(--unit) 0;
 }
 
 .site-title::before {
@@ -61,6 +63,21 @@ p {
 .unemph {
     font-style: italic;
     color: var(--text-unemph);
+}
+
+a {
+    color: inherit;
+    transition: background-color ease-out .05s;
+    border-radius: 2px;
+
+    text-decoration-color: var(--text-unemph);
+    text-underline-offset: 3px;
+    text-underline-position: from-font;
+    text-decoration-thickness: from-font;
+}
+
+a:focus {
+    outline: 2px solid currentColor;
 }
 
 table {
