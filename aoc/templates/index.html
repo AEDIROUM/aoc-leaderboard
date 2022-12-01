@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <title>Advent of Code à l’AÉDIROUM</title>
+
         <link rel="stylesheet" href="static/style.css">
         <link href="https://advent.calculum.ca/" rel="canonical">
         <meta content="width=device-width, initial-scale=1" name="viewport">
@@ -14,12 +15,14 @@
         </h1>
 
         <p>
-            Cette année, l’AÉDIROUM offre 200$ de récompense partagée entre les membres qui se hissent en haut de notre classement local à l’<em>Advent of Code</em>.
+            Cette année, l’<a target="_blank" rel="noopener" href="https://aediroum.iro.umontreal.ca/">AÉDIROUM</a>
+            offre 200$ de récompense partagée entre les membres qui se hissent en haut de notre classement local à
+            l’<em><a target="_blank" rel="noopener" href="https://adventofcode.com/">Advent of Code</a></em>.
             Les quatre premières personnes en 1ʳᵉ ou 2ᵉ année, et les quatre premières personnes en 3ᵉ année ou aux cycles supérieurs recevront chacune 25$ à l’issue du concours.
         </p>
 
         <p>
-            <a target="_blank" rel="noopener" href="https://forms.office.com/r/irg2dqRdSD">Rejoindre le classement →</a>
+            <a target="_blank" rel="noopener" href="https://forms.office.com/r/irg2dqRdSD">Rejoindre notre classement →</a>
         </p>
 
         {% for category, leaderboard in leaderboards %}
@@ -34,7 +37,7 @@
             </colgroup>
             <thead>
                 <tr>
-                    <th>Rang</th>
+                    <th class="numeric">Rang</th>
                     <th>Nom</th>
                     <th class="numeric">Étoiles</th>
                     <th class="numeric">Score</th>
