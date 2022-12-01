@@ -1,0 +1,86 @@
+:root {
+    --background: #171717;
+    --background-light: #242424;
+    --background-hover: #2C2C2C;
+    --text: #E1E1E1;
+    --text-unemph: #BABABA;
+    --unit: 25px;
+
+    background-color: var(--background);
+    color: var(--text);
+
+    font-family: Helvetica, sans-serif;
+    font-size: 18px;
+    line-height: var(--unit);
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    max-width: calc(40 * var(--unit));
+    margin: 2cm auto;
+}
+
+h1, h2, h3 {
+    font-weight: normal;
+}
+
+h1 {
+    font-size: 1.35rem;
+    line-height: 1.2;
+}
+
+h2 {
+    font-size: 1.25rem;
+    line-height: 1.2;
+}
+
+.site-title::before {
+    content: url("logo.svg");
+    float: left;
+    margin-right: var(--unit);
+    width: calc(4 * var(--unit));
+    height: calc(4 * var(--unit));
+}
+
+.site-title + * {
+    clear: both;
+}
+
+p {
+    margin: var(--unit) 0;
+}
+
+.unemph {
+    font-style: italic;
+    color: var(--text-unemph);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th, table td {
+    text-align: left;
+    padding: 5px 5px;
+}
+
+table .numeric {
+    text-align: right;
+}
+
+tbody tr:nth-child(2n + 1) {
+    background-color: var(--background-light);
+}
+
+table tr:hover {
+    background-color: var(--background-hover);
+}

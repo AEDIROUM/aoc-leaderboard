@@ -1,0 +1,15 @@
+import aoc.data
+import sys
+
+if len(sys.argv) <= 1:
+    print("Missing argument")
+    sys.exit(1)
+
+if sys.argv[1] == "leaderboard":
+    aoc.data.update_leaderboard()
+    print("Updated leaderboard")
+elif sys.argv[1] == "registration":
+    aoc.data.update_registration()
+    print("Updated registration")
+else:
+    print("Unknown action")

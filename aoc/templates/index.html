@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <title>Advent of Code à l’AÉDIROUM</title>
+        <link rel="stylesheet" href="static/style.css">
+    </head>
+    <body>
+        <h1 class="site-title">Advent of Code<br>à l’AÉDIROUM</h1>
+
+        <p>
+            Cette année, l’AÉDIROUM offre 200$ de récompense partagée entre les membres en haut de notre classement local. Les quatre premières personnes en 1ʳᵉ ou 2ᵉ année, et les quatre premières personnes en 3ᵉ année ou aux cycles supérieurs recevront chacune 25$ à l’issue du concours.
+        </p>
+
+        {% for category, leaderboard in leaderboards %}
+        <h2>{{ category }}</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th class="numeric">Étoiles</th>
+                    <th class="numeric">Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in leaderboard %}
+                <tr>
+                    <td>{{ entry["name"] }}</td>
+                    <td class="numeric">{{ entry["stars"] }}/50</td>
+                    <td class="numeric">{{ entry["local_score"] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endfor %}
+
+        <p class="unemph">
+            Le classement est mis à jour toutes les 15 minutes.
+            La dernière mise à jour a eu lieu le {{ now }}.
+        </p>
+    </body>
+</html>
