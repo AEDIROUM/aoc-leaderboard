@@ -7,7 +7,7 @@ from babel.dates import format_datetime
 from .data import get_registration, get_leaderboard
 
 
-DATETIME_FORMAT = "dd MMMM yyyy 'à' HH 'h' mm"
+DATETIME_FORMAT = "d MMMM yyyy 'à' HH 'h' mm"
 
 
 def generate_leaderboard(users, leaderboard):
