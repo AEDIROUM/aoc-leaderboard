@@ -106,6 +106,7 @@ def generate_leaderboard(users, leaderboard):
 
     return template.render({
         "leaderboards": sorted(data.items()),
+        "year": config.leaderboard.year,
         "live_days": live_days,
         "now": format_datetime(
             now,

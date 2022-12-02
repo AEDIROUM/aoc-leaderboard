@@ -51,7 +51,7 @@
                     <td class="stars">
                         {% for info in entry["stars"] %}
                         {% if loop.index in live_days %}
-                        <a href="https://adventofcode.com/2022/day/{{ loop.index }}"
+                        <a href="https://adventofcode.com/{{ year }}/day/{{ loop.index }}"
                             target="_blank" rel="noopener"
                         {% else %}
                         <span
