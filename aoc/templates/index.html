@@ -49,13 +49,19 @@
                     <td class="numeric">{{ entry["rank"] }}</td>
                     <td>{{ entry["name"] }}</td>
                     <td class="stars">
-                        {% for completion in entry["stars"] %}
+                        {% for info in entry["stars"] %}
                         {% if loop.index in live_days %}
                         <a href="https://adventofcode.com/2022/day/{{ loop.index }}"
-                           target="_blank" rel="noopener"
-                           class="star star-{{ completion }}"></a>
+                            target="_blank" rel="noopener"
                         {% else %}
-                        <span class="star star-{{ completion }}"></span>
+                        <span
+                        {% endif %}
+                            title="{{ info["status"] }}"
+                            class="star star-{{ info["level"] }}">
+                        {% if loop.index in live_days %}
+                        </a>
+                        {% else %}
+                        </span>
                         {% endif %}
                         {% endfor %}
                     </td>
