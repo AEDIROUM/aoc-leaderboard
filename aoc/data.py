@@ -4,20 +4,25 @@ from azure.identity import InteractiveBrowserCredential, TokenCachePersistenceOp
 from .config import config
 
 
-leaderboard_cache = "cache/leaderboard.json"
-registration_cache = "cache/registration.json"
+LEADERBOARD_CACHE = "cache/leaderboard.json"
+REGISTRATION_CACHE = "cache/registration.json"
+USER_AGENT = {
+    "From": "git.matteo@delab.re",
+    "User-Agent": "aoc-leaderboard (github.com/matteodelabre/aoc-leaderboard)",
+}
 
 
 def fetch_leaderboard(id, year, session):
     endpoint = f"https://adventofcode.com/{year}/leaderboard/private/view/{id}.json"
     cookies = {"session": session}
-    req = requests.get(endpoint, cookies=cookies)
+    headers = {**USER_AGENT}
+    req = requests.get(endpoint, cookies=cookies, headers=headers)
     return req.json()
 
 
 def get_leaderboard():
     try:
-        with open(leaderboard_cache, "r") as file:
+        with open(LEADERBOARD_CACHE, "r") as file:
             return json.load(file)
     except FileNotFoundError:
         return {"members": {}}
@@ -30,7 +35,7 @@ def update_leaderboard():
         session=config.leaderboard.session,
     )
 
-    with open(leaderboard_cache, "w") as file:
+    with open(LEADERBOARD_CACHE, "w") as file:
         json.dump(data, file)
 
 
@@ -40,7 +45,10 @@ def fetch_registration(tenant, user, form, username, category):
     token = credential.get_token(scope).token
 
     endpoint = f"https://forms.office.com/formapi/api/{tenant}/users/{user}/light/forms('{form}')/responses?$expand=comments&$top=500&$skip=0"
-    headers = {"Authorization": f"Bearer {token}"}
+    headers = {
+        "Authorization": f"Bearer {token}",
+        **USER_AGENT,
+    }
 
     res = requests.get(endpoint, headers=headers)
     assert res.status_code == 200
@@ -59,7 +67,7 @@ def fetch_registration(tenant, user, form, username, category):
 
 def get_registration():
     try:
-        with open(registration_cache, "r") as file:
+        with open(REGISTRATION_CACHE, "r") as file:
             return json.load(file)
     except FileNotFoundError:
         return {}
@@ -74,5 +82,5 @@ def update_registration():
         category=config.registration.category,
     )
 
-    with open(registration_cache, "w") as file:
+    with open(REGISTRATION_CACHE, "w") as file:
         json.dump(data, file)
