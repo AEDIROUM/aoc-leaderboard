@@ -53,27 +53,28 @@ def generate_entry(member):
     for day in range(1, 26):
         level = 0
         status = []
-
         start_time = get_puzzle_start(day)
-        get_delta = lambda timestamp: format_timedelta(
-            datetime.fromtimestamp(timestamp, tz=UTC) - start_time)
 
         if str(day) in member["completion_day_level"]:
             info = member["completion_day_level"][str(day)]
 
             if "1" in info:
                 level = 1
-                status.append(
-                    "Première partie résolue en "
-                    + get_delta(info["1"]["get_star_ts"])
-                )
+                part1_timestamp = info["1"]["get_star_ts"]
+                part1_time = datetime.fromtimestamp(part1_timestamp, tz=UTC)
+                from_start = format_timedelta(part1_time - start_time)
+                status.append(f"Première étoile: {from_start}")
 
-            if "2" in info:
-                level = 2
-                status.append(
-                    "Seconde partie résolue en "
-                    + get_delta(info["2"]["get_star_ts"])
-                )
+                if "2" in info:
+                    level = 2
+                    part2_timestamp = info["2"]["get_star_ts"]
+                    part2_time = datetime.fromtimestamp(part2_timestamp, tz=UTC)
+                    from_start = format_timedelta(part2_time - start_time)
+                    from_first = format_timedelta(part2_time - part1_time)
+                    status.append(f"Seconde étoile: {from_start} (+ {from_first})")
+
+        if status:
+            status = [f"[Jour {day}]"] + status
 
         stars.append({
             "level": level,
