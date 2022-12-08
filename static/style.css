@@ -4,6 +4,7 @@
     --background-hover: #2C2C2C;
     --text: #E1E1E1;
     --text-unemph: #BABABA;
+    --text-tertiary: #555;
     --unit: 25px;
 
     background-color: var(--background);
@@ -98,6 +99,10 @@ table .numeric {
     text-align: right;
 }
 
+.stars {
+    cursor: default;
+}
+
 .star {
     display: inline-block;
     width: calc(.5 * var(--unit));
@@ -121,6 +126,10 @@ table .numeric {
 .star-0::before {
     content: "\2606";
     color: var(--text-unemph);
+}
+
+span.star-0::before {
+    color: var(--text-tertiary);
 }
 
 tbody tr:nth-child(2n + 1) {
