@@ -13,25 +13,31 @@ DATETIME_FORMAT = "d MMMM yyyy 'à' HH 'h' mm"
 TIMEZONE = get_timezone("America/Montreal")
 
 
-def format_part(value, name):
-    if value == 0:
-        return []
-    else:
-        return [f"{value} {name}"]
-
-
 def format_timedelta(delta):
     parts = []
     hours = delta.seconds // (60 * 60)
     minutes = (delta.seconds % (60 * 60)) // 60
     seconds = delta.seconds % 60
 
-    parts.extend(format_part(delta.days, "j"))
-    parts.extend(format_part(hours, "h"))
-    parts.extend(format_part(minutes, "min"))
-    parts.extend(format_part(seconds, "s"))
+    parts = [
+        [delta.days, "j"],
+        [hours, "h"],
+        [minutes, "min"],
+        [seconds, "s"],
+    ]
 
-    return " ".join(parts)
+    for left, (value, _) in enumerate(parts):
+        if value != 0:
+            break
+
+    for right, (value, _) in reversed(list(enumerate(parts))):
+        if value != 0:
+            break
+
+    return " ".join(
+        f"{value} {name}"
+        for value, name in parts[left:right + 1]
+    )
 
 
 def get_puzzle_start(day):
