@@ -4,8 +4,8 @@ from azure.identity import InteractiveBrowserCredential, TokenCachePersistenceOp
 from .config import config
 
 
-LEADERBOARD_CACHE = "cache/leaderboard.json"
-REGISTRATION_CACHE = "cache/registration.json"
+LEADERBOARD_CACHE = "cache/{0}-leaderboard.json"
+REGISTRATION_CACHE = "cache/{0}-registration.json"
 USER_AGENT = {
     "From": "git.matteo@delab.re",
     "User-Agent": "aoc-leaderboard (github.com/matteodelabre/aoc-leaderboard)",
@@ -20,22 +20,28 @@ def fetch_leaderboard(id, year, session):
     return req.json()
 
 
-def get_leaderboard():
+def get_leaderboard(year):
     try:
-        with open(LEADERBOARD_CACHE, "r") as file:
+        with open(LEADERBOARD_CACHE.format(year), "r") as file:
             return json.load(file)
     except FileNotFoundError:
         return {"members": {}}
 
 
-def update_leaderboard():
-    data = fetch_leaderboard(
-        id=config.leaderboard.id,
-        year=config.leaderboard.year,
-        session=config.leaderboard.session,
-    )
+def update_leaderboard(year):
+    try:
+        data = fetch_leaderboard(
+            id=config.leaderboard.id,
+            year=year,
+            session=config.leaderboard.session,
+        )
+    except requests.exceptions.JSONDecodeError:
+        raise RuntimeError(
+            "Invalid server response. "
+            "Check validity of the session cookie"
+        )
 
-    with open(LEADERBOARD_CACHE, "w") as file:
+    with open(LEADERBOARD_CACHE.format(year), "w") as file:
         json.dump(data, file)
 
 
@@ -65,9 +71,9 @@ def fetch_registration(tenant, user, form, username, category):
     return users
 
 
-def get_registration():
+def get_registration(year):
     try:
-        with open(REGISTRATION_CACHE, "r") as file:
+        with open(REGISTRATION_CACHE.format(year), "r") as file:
             return json.load(file)
     except FileNotFoundError:
         return {}
@@ -82,5 +88,5 @@ def update_registration():
         category=config.registration.category,
     )
 
-    with open(REGISTRATION_CACHE, "w") as file:
+    with open(REGISTRATION_CACHE.format(year), "w") as file:
         json.dump(data, file)

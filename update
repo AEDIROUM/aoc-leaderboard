@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 import aoc.data
+from aoc.config import config
 import sys
 
 if len(sys.argv) <= 1:
-    print("Missing argument")
+    print(f"Usage: {sys.argv[0]} [leaderboard|registration]")
+    print("Update the leaderboard or registration data for the current year")
     sys.exit(1)
 
 if sys.argv[1] == "leaderboard":
-    aoc.data.update_leaderboard()
+    aoc.data.update_leaderboard(config.leaderboard.current_year)
     print("Updated leaderboard")
 elif sys.argv[1] == "registration":
     aoc.data.update_registration()

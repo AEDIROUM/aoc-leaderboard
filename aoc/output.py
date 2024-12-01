@@ -40,26 +40,26 @@ def format_timedelta(delta):
     )
 
 
-def get_puzzle_start(day):
+def get_puzzle_start(year, day):
     return datetime(
-        year=config.leaderboard.year, month=12, day=day,
+        year=int(year), month=12, day=day,
         hour=5, minute=0, second=0,
         tzinfo=UTC,
     )
 
 
-def get_live_puzzles():
+def get_live_puzzles(year):
     now = datetime.now(tz=UTC)
-    return [day for day in range(1, 26) if now >= get_puzzle_start(day)]
+    return [day for day in range(1, 26) if now >= get_puzzle_start(year, day)]
 
 
-def generate_entry(member):
+def generate_entry(year, member):
     stars = []
 
     for day in range(1, 26):
         level = 0
         status = []
-        start_time = get_puzzle_start(day)
+        start_time = get_puzzle_start(year, day)
 
         if str(day) in member["completion_day_level"]:
             info = member["completion_day_level"][str(day)]
@@ -94,26 +94,26 @@ def generate_entry(member):
     }
 
 
-def generate_leaderboard(users, leaderboard):
+def generate_leaderboard(year, users, leaderboard):
     environment = Environment(loader=FileSystemLoader("./aoc/templates"))
     template = environment.get_template("index.html")
 
     now = datetime.now(tz=UTC)
-    live_days = get_live_puzzles()
+    live_days = get_live_puzzles(year)
 
     data = defaultdict(list)
 
     for key, member in leaderboard["members"].items():
         if member["name"] in users:
             category = users[member["name"]]
-            data[category].append(generate_entry(member))
+            data[category].append(generate_entry(year, member))
 
     for category, entries in data.items():
         rank_entries(entries)
 
     return template.render({
         "leaderboards": sorted(data.items()),
-        "year": config.leaderboard.year,
+        "year": year,
         "live_days": live_days,
         "now": format_datetime(
             now,
@@ -128,14 +128,24 @@ def make_static(src, dest):
     shutil.copytree(src + "/static", dest + "/static")
 
 
+def make_leaderboard(dest, year):
+    users = get_registration(year)
+    leaderboard = get_leaderboard(year)
+
+    with open(dest + f"/{year}.html", "w") as file:
+        file.write(generate_leaderboard(year, users, leaderboard))
+
+
 def make_all(src, dest):
     shutil.rmtree(dest, ignore_errors=True)
     os.mkdir(dest)
 
-    users = get_registration()
-    leaderboard = get_leaderboard()
+    all_years = (
+        [config.leaderboard.current_year]
+        + config.leaderboard.old_years
+    )
 
-    with open(dest + "/index.html", "w") as file:
-        file.write(generate_leaderboard(users, leaderboard))
+    for year in all_years:
+        make_leaderboard(dest, year)
 
     make_static(src, dest)
