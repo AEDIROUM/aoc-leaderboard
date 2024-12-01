@@ -1,5 +1,6 @@
 import requests
 import json
+from datetime import datetime, timezone
 from azure.identity import InteractiveBrowserCredential, TokenCachePersistenceOptions, UsernamePasswordCredential
 from .config import config
 
@@ -40,6 +41,8 @@ def update_leaderboard(year):
             "Invalid server response. "
             "Check validity of the session cookie"
         )
+
+    data["last_update"] = datetime.now(tz=timezone.utc).isoformat()
 
     with open(LEADERBOARD_CACHE.format(year), "w") as file:
         json.dump(data, file)

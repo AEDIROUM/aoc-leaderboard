@@ -117,8 +117,8 @@ def generate_leaderboard(year, users, leaderboard):
         "year": year,
         "show_years": config.leaderboard.show_years,
         "live_days": live_days,
-        "now": format_datetime(
-            now,
+        "last_update": format_datetime(
+            datetime.fromisoformat(leaderboard["last_update"]),
             DATETIME_FORMAT,
             tzinfo=TIMEZONE,
             locale='fr_CA',
