@@ -12,7 +12,7 @@ if sys.argv[1] == "leaderboard":
     aoc.data.update_leaderboard(config.leaderboard.year)
     print("Updated leaderboard")
 elif sys.argv[1] == "registration":
-    aoc.data.update_registration()
+    aoc.data.update_registration(config.leaderboard.year)
     print("Updated registration")
 else:
     print("Unknown action")

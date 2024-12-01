@@ -13,8 +13,6 @@ class Leaderboard:
 @dataclass(frozen=True)
 class Registration:
     link: str
-    tenant: str
-    user: str
     form: str
     username: int
     category: int
@@ -38,11 +36,9 @@ def read_config(path):
         ),
         registration=Registration(
             link=parser["registration"]["link"],
-            tenant=parser["registration"]["tenant"],
-            user=parser["registration"]["user"],
             form=parser["registration"]["form"],
-            username=int(parser["registration"]["username"]),
-            category=int(parser["registration"]["category"]),
+            username=parser["registration"]["username"],
+            category=parser["registration"]["category"],
         ),
     )
 
