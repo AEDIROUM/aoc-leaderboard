@@ -1,9 +1,14 @@
 from jinja2 import Environment, FileSystemLoader
 from collections import defaultdict
+from dataclasses import dataclass
 import shutil
 import os
 from datetime import datetime
 from babel.dates import format_datetime, get_timezone, UTC
+import plotly.express as px
+import pandas as pd
+import io
+from typing import Optional
 from .config import config
 from .data import get_registration, get_leaderboard
 from .rank import rank_entries
@@ -53,34 +58,61 @@ def get_live_puzzles(year):
     return [day for day in range(1, 26) if now >= get_puzzle_start(year, day)]
 
 
-def generate_entry(year, member):
-    stars = []
+@dataclass
+class Star:
+    start_date: datetime
+    part1_date: Optional[datetime] = None
+    part1_index: Optional[int] = None
+    part2_date: Optional[datetime] = None
+    part2_index: Optional[int] = None
+
+
+def get_star_data(year, member):
+    star_data = []
 
     for day in range(1, 26):
-        level = 0
-        status = []
-        start_time = get_puzzle_start(year, day)
+        start_date = get_puzzle_start(year, day)
+        star = Star(start_date=start_date)
 
         if str(day) in member["completion_day_level"]:
             info = member["completion_day_level"][str(day)]
 
             if "1" in info:
-                level = 1
                 part1_timestamp = info["1"]["get_star_ts"]
-                part1_time = datetime.fromtimestamp(part1_timestamp, tz=UTC)
-                from_start = format_timedelta(part1_time - start_time)
-                status.append(f"Première étoile: {from_start}")
+                star.part1_date = datetime.fromtimestamp(part1_timestamp, tz=UTC)
+                star.part1_index = info["1"]["star_index"]
 
-                if "2" in info:
-                    level = 2
-                    part2_timestamp = info["2"]["get_star_ts"]
-                    part2_time = datetime.fromtimestamp(part2_timestamp, tz=UTC)
-                    from_start = format_timedelta(part2_time - start_time)
-                    from_first = format_timedelta(part2_time - part1_time)
-                    status.append(f"Seconde étoile: {from_start} (+ {from_first})")
+            if "2" in info:
+                part2_timestamp = info["2"]["get_star_ts"]
+                star.part2_date = datetime.fromtimestamp(part2_timestamp, tz=UTC)
+                star.part2_index = info["2"]["star_index"]
 
-        if status:
-            status = [f"[Jour {day}]"] + status
+        star_data.append(star)
+
+    return star_data
+
+
+def generate_entry(year, member):
+    stars = []
+    star_data = get_star_data(year, member)
+
+    for star in star_data:
+        status = []
+        level = 0
+
+        if star.part1_date is not None or star.part2_date is not None:
+            status.append(f"[Jour {star.start_date.day}]")
+
+        if star.part1_date is not None:
+            from_start = format_timedelta(star.part1_date - star.start_date)
+            status.append(f"Première étoile: {from_start}")
+            level = 1
+
+        if star.part2_date is not None:
+            from_start = format_timedelta(star.part2_date - star.start_date)
+            from_first = format_timedelta(star.part2_date - star.part1_date)
+            status.append(f"Seconde étoile: {from_start} (+ {from_first})")
+            level = 2
 
         stars.append({
             "level": level,
@@ -98,6 +130,8 @@ def generate_leaderboard(year, users, leaderboard):
     environment = Environment(loader=FileSystemLoader("./aoc/templates"))
     template = environment.get_template("index.html")
 
+    plot = generate_plot(year, users, leaderboard)
+
     now = datetime.now(tz=UTC)
     live_days = get_live_puzzles(year)
 
@@ -113,6 +147,7 @@ def generate_leaderboard(year, users, leaderboard):
 
     return template.render({
         "form_link": config.registration.link,
+        "plot": plot,
         "leaderboards": sorted(data.items()),
         "year": year,
         "show_years": config.leaderboard.show_years,
@@ -124,6 +159,62 @@ def generate_leaderboard(year, users, leaderboard):
             locale='fr_CA',
         ),
     })
+
+
+def generate_plot(year, users, leaderboard):
+    data = []
+
+    for member in list(leaderboard["members"].values()):
+        if member["name"] in users:
+            star_data = get_star_data(year, member)
+            data.extend(
+                {
+                    "member": member["name"],
+                    "day": star.start_date.day,
+                    "time": (star.part2_date - star.start_date).seconds
+                }
+                for star in star_data
+                if star.part2_date is not None
+            )
+
+    data = pd.DataFrame(data)
+    
+    fig = px.strip(
+        data,
+        x="day",
+        y="time",
+        log_y=True,
+        color="member",
+        labels={
+            "day": "Jour",
+            "time": "Temps de résolution (s)",
+            "member": "Personne"
+        },
+        template="plotly_dark",
+    )
+
+    fig.update_xaxes(
+        type="category",
+        categoryorder="array",
+        categoryarray=list(range(1, 26)),
+        range=(-.5, 24.5),
+        constrain="domain",
+        showgrid=True,
+        ticks="outside",
+        tickson="boundaries",
+        ticklen=20
+    )
+
+    fig.update_traces(
+        marker={"size": 6},
+        hovertemplate="%{y} s",
+    )
+
+    result_file = io.StringIO()
+    fig.write_html(result_file, full_html=False, include_plotlyjs="cdn")
+    result_string = result_file.getvalue()
+    result_file.close()
+    return result_string
 
 
 def make_static(src, dest):
