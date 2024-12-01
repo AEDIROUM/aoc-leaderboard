@@ -112,6 +112,7 @@ def generate_leaderboard(year, users, leaderboard):
         rank_entries(entries)
 
     return template.render({
+        "form_link": config.registration.link,
         "leaderboards": sorted(data.items()),
         "year": year,
         "live_days": live_days,

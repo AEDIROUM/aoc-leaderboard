@@ -21,9 +21,11 @@
             Les quatre premières personnes en 1ʳᵉ ou 2ᵉ année, et les quatre premières personnes en 3ᵉ année ou aux cycles supérieurs recevront chacune 25$ à l’issue du concours.
         </p>
 
+        {% if form_link != '' %}
         <p>
-            <a target="_blank" rel="noopener" href="https://forms.office.com/r/FnHYsRex27">Rejoindre notre classement →</a>
+            <a target="_blank" rel="noopener" href="{{ form_link }}">Rejoindre notre classement →</a>
         </p>
+        {% endif %}
 
         {% for category, leaderboard in leaderboards %}
         <h2>{{ category }}</h2>

@@ -12,6 +12,7 @@ class Leaderboard:
 
 @dataclass(frozen=True)
 class Registration:
+    link: str
     tenant: str
     user: str
     form: str
@@ -36,6 +37,7 @@ def read_config(path):
             old_years=parser["leaderboard"]["old-years"].split(","),
         ),
         registration=Registration(
+            link=parser["registration"]["link"],
             tenant=parser["registration"]["tenant"],
             user=parser["registration"]["user"],
             form=parser["registration"]["form"],
