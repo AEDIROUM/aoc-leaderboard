@@ -5,9 +5,9 @@ from configparser import ConfigParser
 @dataclass(frozen=True)
 class Leaderboard:
     id: str
-    current_year: str
+    year: str
     session: str
-    old_years: list[str]
+    show_years: list[str]
 
 
 @dataclass(frozen=True)
@@ -32,9 +32,9 @@ def read_config(path):
     return Config(
         leaderboard=Leaderboard(
             id=parser["leaderboard"]["id"],
-            current_year=parser["leaderboard"]["current-year"],
+            year=parser["leaderboard"]["year"],
             session=parser["leaderboard"]["session"],
-            old_years=parser["leaderboard"]["old-years"].split(","),
+            show_years=parser["leaderboard"]["show-years"].split(","),
         ),
         registration=Registration(
             link=parser["registration"]["link"],

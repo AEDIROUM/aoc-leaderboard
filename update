@@ -9,7 +9,7 @@ if len(sys.argv) <= 1:
     sys.exit(1)
 
 if sys.argv[1] == "leaderboard":
-    aoc.data.update_leaderboard(config.leaderboard.current_year)
+    aoc.data.update_leaderboard(config.leaderboard.year)
     print("Updated leaderboard")
 elif sys.argv[1] == "registration":
     aoc.data.update_registration()

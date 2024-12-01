@@ -27,6 +27,18 @@
         </p>
         {% endif %}
 
+        <p style="margin-top: -1em">
+            <em>Autres années:</em>
+            {% for other_year in show_years %}
+                {% if year == other_year %}
+                    {{ year }}
+                {% else %}
+                    <a href="{{ other_year }}.html">{{ other_year }}</a>
+                {% endif %}
+                {% if not loop.last %} · {% endif %}
+            {% endfor %}
+        </p>
+
         {% for category, leaderboard in leaderboards %}
         <h2>{{ category }}</h2>
 

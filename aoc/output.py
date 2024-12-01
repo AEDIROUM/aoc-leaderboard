@@ -115,6 +115,7 @@ def generate_leaderboard(year, users, leaderboard):
         "form_link": config.registration.link,
         "leaderboards": sorted(data.items()),
         "year": year,
+        "show_years": config.leaderboard.show_years,
         "live_days": live_days,
         "now": format_datetime(
             now,
@@ -141,12 +142,7 @@ def make_all(src, dest):
     shutil.rmtree(dest, ignore_errors=True)
     os.mkdir(dest)
 
-    all_years = (
-        [config.leaderboard.current_year]
-        + config.leaderboard.old_years
-    )
-
-    for year in all_years:
+    for year in config.leaderboard.show_years:
         make_leaderboard(dest, year)
 
     make_static(src, dest)
